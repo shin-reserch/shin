@@ -189,7 +189,7 @@ if __name__ == '__main__':
         use_teacher_forcing = (random.random() < teacher_forcing_rate)
         model.train()
         preds = model(x, t, use_teacher_forcing=use_teacher_forcing)
-        loss = compute_loss(t.view(-1),
+        loss = compute_loss(t.contiguous().view(-1),
                             preds.view(-1, preds.size(-1)))
 
         optimizer.zero_grad()
@@ -201,7 +201,7 @@ if __name__ == '__main__':
     def val_step(x, t):
         model.eval()
         preds = model(x, t, use_teacher_forcing=False)
-        loss = compute_loss(t.view(-1),
+        loss = compute_loss(t.contiguous().view(-1),
                             preds.view(-1, preds.size(-1)))
 
         return loss, preds
